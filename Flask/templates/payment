@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Payment Form</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+      form {
+        margin-top: 20px;
+      }
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+      input[type=text], input[type=number] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        box-sizing: border-box;
+      }
+      input[type=submit] {
+        background-color: #428bca;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <form id="payment-form">
+      <label for="card-number">Card Number</label>
+      <div id="card-number"></div>
+      <label for="card-expiry">Expiration Date</label>
+      <div id="card-expiry"></div>
+      <label for="card-cvc">CVC</label>
+      <div id="card-cvc"></div>
+      <input type="submit" value="Pay">
+    </form>
+    <script>
+      var stripe = Stripe('YOUR_STRIPE_PUBLIC_KEY');
+      var elements = stripe.elements();
+
+      var cardNumber = elements.create('cardNumber');
+      cardNumber.mount('#card-number');
+
+      var cardExpiry = elements.create('cardExpiry');
+      cardExpiry.mount('#card-expiry');
+
+      var cardCvc = elements.create('cardCvc');
+      cardCvc.mount('#card-cvc');
+
+      var form = document.getElementById('payment-form');
+      form.addEventListener('submit', function(event) {
+        event.preventDefault();
+        stripe.createToken(cardNumber).then(function(result) {
+          if (result.error) {
+            alert(result.error.message);
+          } else {
+            // Use the token to create a charge
+            console.log(result.token);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
