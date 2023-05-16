@@ -1,18 +1,22 @@
 from flask import Flask, render_template
-import datetime
-
-time = datetime.datetime.now()
+import stripe
 
 app = Flask(__name__)
 
+stripe.api_key = 'Ypk_test_51N7gsaHBOaMqUausnnLkrVyBmcX3eKKLPxIzZYKsLr8806rocGRZvslZ5nvRaz04CR3Az2OMyNYEIZgXDoLVwfu200u3wyDkPw'
+
+@app.route('/pay')
+def payment():
+    return render_template('payment.html')
+
 @app.route('/')
-def Home():
-    return render_template('home.html', time = datetime.datetime.now())
+def home():
+    return render_template('home.html')
 
 @app.route('/contact')
 def contact():
-    return render+render_template('contact.html')
-                                  
+    return render_template('contact.html')
+
 @app.route('/about')
 def about():
     return render_template('about.html')
@@ -20,14 +24,6 @@ def about():
 @app.route('/products')
 def products():
     return render_template('products.html')
-
-@app.route('/hello/<name>')
-def hello(name):
-    return render_template('hello.html', name = name)
-
-
-
-
 
 if __name__=='__main__':
     app.run(debug=True)
